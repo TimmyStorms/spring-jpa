@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
@@ -41,9 +42,14 @@ public class SpringConfiguration {
 		entityManager.setJpaVendorAdapter(jpaAdapter);
 		return entityManager;
 	}
+	
+	@Bean
+	public LazyConnectionDataSourceProxy dataSource() {
+		return new LazyConnectionDataSourceProxy(pooledDataSource());
+	}
 
 	@Bean(destroyMethod = "close")
-	public DataSource dataSource() {
+	public DataSource pooledDataSource() {
 		final BoneCPDataSource dataSource = new BoneCPDataSource();
 		dataSource.setDriverClass(env.getProperty("jdbc.driverClassName"));
 		dataSource.setJdbcUrl(env.getProperty("jdbc.url"));
