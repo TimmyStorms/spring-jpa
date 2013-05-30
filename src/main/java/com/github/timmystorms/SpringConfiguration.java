@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -25,7 +26,7 @@ import com.jolbox.bonecp.BoneCPDataSource;
 @ComponentScan({ "com.github.timmystorms" })
 @EnableJpaRepositories(basePackages = { "com.github.timmystorms" })
 @ImportResource("classpath:config.xml")
-public class SpringConfiguration {
+public class SpringConfiguration extends RepositoryRestMvcConfiguration {
 
 	@Autowired
 	private Environment env;
@@ -42,7 +43,7 @@ public class SpringConfiguration {
 		entityManager.setJpaVendorAdapter(jpaAdapter);
 		return entityManager;
 	}
-	
+
 	@Bean
 	public LazyConnectionDataSourceProxy dataSource() {
 		return new LazyConnectionDataSourceProxy(pooledDataSource());
@@ -55,14 +56,14 @@ public class SpringConfiguration {
 		dataSource.setJdbcUrl(env.getProperty("jdbc.url"));
 		dataSource.setUsername(env.getProperty("jdbc.user"));
 		dataSource.setPassword(env.getProperty("jdbc.pass"));
-//		<property name="idleConnectionTestPeriod" value="60"/>
-//	    <property name="idleMaxAge" value="240"/>
-//	    <property name="maxConnectionsPerPartition" value="30"/>
-//	    <property name="minConnectionsPerPartition" value="10"/>
-//	    <property name="partitionCount" value="3"/>
-//	    <property name="acquireIncrement" value="5"/>
-//	    <property name="statementsCacheSize" value="100"/>
-//	    <property name="releaseHelperThreads" value="3"/>
+		// <property name="idleConnectionTestPeriod" value="60"/>
+		// <property name="idleMaxAge" value="240"/>
+		// <property name="maxConnectionsPerPartition" value="30"/>
+		// <property name="minConnectionsPerPartition" value="10"/>
+		// <property name="partitionCount" value="3"/>
+		// <property name="acquireIncrement" value="5"/>
+		// <property name="statementsCacheSize" value="100"/>
+		// <property name="releaseHelperThreads" value="3"/>
 		return dataSource;
 	}
 
